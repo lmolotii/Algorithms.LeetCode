@@ -1,0 +1,46 @@
+# Folders
+bin/
+obj/
+sql/
+debug/
+release/
+build/
+packages/
+.nuget/
+.vs/
+.vscode/
+.terraform/
+.vscode/
+.idea/
+
+*.zip
+*.pem
+*.pub
+*.tfvars
+*.jar
+*.tfstate
+*.tfbackup
+*.lts
+.project
+.settings
+.classpath
+terraform.tfstate.backup
+
+*.bak
+*.v3.ncrunch*
+
+# VS files
+*.dbmdl
+*.ncb
+*.suo
+*.vspscc
+*.jfm
+*.log
+
+# Settings
+*.dotCover
+*.DotSettings
+*.StyleCop
+*.user
+
+!packages/repositories.config
