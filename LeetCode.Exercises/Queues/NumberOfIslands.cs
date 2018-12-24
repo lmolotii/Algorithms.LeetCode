@@ -1,5 +1,6 @@
+using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
+using System.Data;
 
 namespace LeetCode.Exercises.Queues
 {
@@ -7,66 +8,107 @@ namespace LeetCode.Exercises.Queues
     {
         public int NumIslands(char[,] grid)
         {
-            if (grid == null || grid.Length == 0)
-                return 0;
-
-
-            int islandsNumber = 0;
+            int maxY = grid.GetLength(0);
+            int maxX = grid.GetLength(1);
             
-            var stack = new Queue<Land>();
-            var visited = new HashSet<Land>();
+            bool[,] visited = new bool[maxY,maxX];
 
-            int maxRow = grid.GetLength(0);
-            int maxColumn = grid.GetLength(1);
+            int numberOfIslands = 0;
 
-            var defaultLand = new Land(0, 0, grid[0, 0]);
-            if (defaultLand.IsLand)
-                islandsNumber++;
-                
-            stack.Enqueue(defaultLand);
-
-            while (stack.Count > 0)
+            for (int x = 0; x < maxX; x++)
             {
-                var item = stack.Dequeue();
-
-                int newRow = item.Row + 1;
-                int newColumn = item.Column + 1;
-
-                var landRigh = new Land(newRow, item.Column, grid[newRow, item.Column]);
-                var landBottom = new Land(item.Row, newColumn, grid[item.Row, newColumn]);
-                    
-                if (newRow < maxRow && !visited.Contains(landRigh))
-                    stack.Enqueue(landRigh);
-
-                if (newColumn < maxColumn && !visited.Contains(landBottom))
-                    stack.Enqueue(landBottom);
-
-                visited.Add(item);
+                for (int y = 0; y < maxY; y++)
+                {
+                    var land = new Land(x, y, grid[y, x]);
+                    if (land.IsLand && !visited[y,x])
+                    {
+                        numberOfIslands++;
+                        OutlineIsland(land, grid, visited);
+                    }
+                    if (!land.IsLand && !visited[y,x])
+                    {
+                        visited[y, x] = true;
+                    }
+                }
             }
 
-            return islandsNumber;
+            return numberOfIslands;
         }
-        
-        public struct Land
+
+        private void OutlineIsland(Land landToStart, char[,] grid, bool[,] visitedPlaces)
         {
-            public readonly int Row;
-            public readonly int Column;
+            var queue = new Queue<Land>();
+            
+            int maxY = grid.GetLength(0);
+            int maxX = grid.GetLength(1);
+
+            
+            queue.Enqueue(landToStart);
+
+            while (queue.TryDequeue(out Land land))
+            {
+                int x = land.X;
+                int y = land.Y;
+                
+                if (land.X + 1 < maxX)
+                {
+                    x = land.X + 1;
+                    y = land.Y;
+                    
+                    ProcessLand(x, y, grid[y, x],queue,visitedPlaces);
+                }
+
+                if (land.X - 1 >= 0)
+                {
+                    x = land.X - 1;
+                    y = land.Y;
+                    
+                    ProcessLand(x, y, grid[y, x],queue,visitedPlaces);
+                }
+
+                if (land.Y + 1 < maxY)
+                {
+                    x = land.X;
+                    y = land.Y + 1;
+                    
+                    ProcessLand(x, y, grid[y, x],queue,visitedPlaces);
+                }
+
+                if (land.Y - 1 >= 0)
+                {
+                    x = land.X;
+                    y = land.Y - 1;
+                    
+                    ProcessLand(x, y, grid[y, x],queue,visitedPlaces);
+                }
+            }
+        }
+
+        private void ProcessLand(int x, int y, char symbol, Queue<Land> queue, bool[,] visitedPlaces)
+        {
+            var newLand = new Land(x, y, symbol);
+
+            if (!visitedPlaces[y, x])
+            {
+                visitedPlaces[y, x] = true;
+                if (newLand.IsLand)
+                    queue.Enqueue(newLand); 
+            }
+        }
+
+        public class Land
+        {
+            public readonly int Y;
+            public readonly int X;
             public readonly char Symbol;
 
             public bool IsLand => Symbol == '1';
 
-            public Land(int row, int column, char symbol)
+            public Land(int x, int y, char symbol)
             {
-                Row = row;
-                Column = column;
+                Y = y;
+                X = x;
                 Symbol = symbol;
-            }
-
-            public override int GetHashCode()
-            {
-                return 424576 + Row.GetHashCode()
-                            + Column.GetHashCode() 
-                            + Symbol.GetHashCode();
             }
         }
     }

@@ -7,6 +7,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeetCode.Exercises", "LeetCode.Exercises\LeetCode.Exercises.csproj", "{052381BB-00D1-4F10-918B-4A2CB947EB3C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tasks", "Tasks", "{B3CC40CB-9FFF-42B0-97CA-74441CBADA2C}"
+ProjectSection(SolutionItems) = preProject
+	readme.md = readme.md
+EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
